@@ -14,20 +14,33 @@ const UploadDashboard = () => {
   };
 
   //  PUT handleUpload HERE
-  const handleUpload = async () => {
-
-    const file = files["landlord"];
+  const handleUpload = async (endpoint) => {
+    const file = files[endpoint];
+    if (!file) {
+      alert("Please select a file first!");
+      return;
+    }
 
     const formData = new FormData();
-    formData.append("file", file);
-        
-    const res = await fetch("http://localhost:5000/api/landlord", {
-      method: "POST",
-      body: formData,
-    });
+    formData.append("excelFilePath", file);
 
-    const data = await res.json();
-    console.log(data);
+    try {
+      const res = await fetch(`http://localhost:5000/api/${endpoint}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server responded with ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log(data);
+      alert(`${file.name} uploaded successfully!`);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed. See console for details.");
+    }
   };
 
   const scrollToSection = (endpoint) => {
