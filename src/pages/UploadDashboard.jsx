@@ -10,6 +10,32 @@ const UploadDashboard = () => {
   const sectionRefs = useRef({});
 
   const handleFileChange = (endpoint, file) => {
+    if (!file) {
+      setFiles((prev) => ({ ...prev, [endpoint]: null }));
+      return;
+    }
+
+    const fileName = file.name.toLowerCase();
+    const expectedFileName = endpoint.toLowerCase();
+    const allowedExtensions = [".xlsx", ".csv", ".json"];
+
+    const isValid = allowedExtensions.some((ext) => {
+      return fileName === `${expectedFileName}${ext}`;
+    });
+
+    if (!isValid) {
+      alert(
+        `Invalid file name. For this section, please upload a file named '${expectedFileName}.xlsx', '${expectedFileName}.csv', or '${expectedFileName}.json'.`
+      );
+      // Clear the file input if the file is invalid
+      const input = document.querySelector(`input[type="file"]`);
+      if (input) {
+        input.value = "";
+      }
+      setFiles((prev) => ({ ...prev, [endpoint]: null }));
+      return;
+    }
+
     setFiles((prev) => ({ ...prev, [endpoint]: file }));
   };
 
