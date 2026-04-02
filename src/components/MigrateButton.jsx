@@ -1,13 +1,14 @@
 import React from "react";
 
-const MigrateButton = () => {
+const MigrateButton = ({ onClick, disabled, loading }) => {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <button
-        className="bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg
-        hover:bg-green-700 transition font-semibold"
+        onClick={onClick}
+        disabled={disabled}
+        className="px-5 py-2 rounded-full accent-btn shadow-sm hover:brightness-95 transition font-medium disabled:opacity-60"
       >
-        Migrate Data
+        {loading ? "Migrating..." : "Migrate Data"}
       </button>
     </div>
   );
